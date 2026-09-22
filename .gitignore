@@ -168,5 +168,6 @@ ruff-cache/
 logs/
 
 temp/
+results/temp/
 
 .gradio/

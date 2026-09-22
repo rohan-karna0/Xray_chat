@@ -91,7 +91,9 @@ python evaluate_chestagentbench.py \
   --max-questions 10
 ```
 
-Results are written as JSONL files in `results/`. This directory is intentionally excluded from Git because evaluation output is generated locally.
+The repository includes a sample 2,500-record evaluation output at `results/chestagentbench_rfsousa_qwen2.5vl_tools_20260801_191520.jsonl`. Each record contains the model response, extracted answer, reference answer, correctness, runtime, and benchmark metadata.
+
+New evaluation outputs are written to `results/`. Temporary uploaded and processed images under `results/temp/` are kept out of Git.
 
 ## Project Structure
 
@@ -107,6 +109,7 @@ Results are written as JSONL files in `results/`. This directory is intentionall
 ├── benchmark/                      # Benchmark helpers
 ├── data/                           # Metadata and data utilities
 ├── demo/                           # Sample chest X-ray studies
+├── results/                        # Published benchmark result sample
 └── pyproject.toml                  # Package and dependency configuration
 ```
 
