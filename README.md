@@ -1,26 +1,10 @@
-# MedRAX: Chest X-ray Reasoning Agent
+# Xray_chat: Chest X-ray Reasoning Agent
 
-**Author:** Rohan Karna
 **Repository:** [github.com/rohan-karna0/MedRAX](https://github.com/rohan-karna0/MedRAX)
 
-MedRAX is a medical AI application for analyzing chest X-ray images and DICOM studies through a multimodal reasoning agent. It combines a Gradio interface, configurable medical imaging tools, and an OpenAI-compatible vision-language model endpoint.
+Xray_chat is a medical AI application for analyzing chest X-ray images and DICOM studies through a multimodal reasoning agent. It combines a Gradio interface, configurable medical imaging tools, and an OpenAI-compatible vision-language model endpoint.
 
 > This project is for research and demonstration only. It is not a medical diagnostic system.
-
-## My Implementation
-
-I reworked the application around an open-source Qwen vision-language model and built a configurable workflow for image-based medical reasoning.
-
-Key work in this version:
-
-- Qwen2.5-VL tools model as the default reasoning model
-- OpenAI-compatible support for local and hosted model endpoints
-- Gradio chat interface for image and DICOM uploads
-- DICOM conversion and browser-friendly image previews
-- Selective initialization of medical imaging tools
-- ChestAgentBench evaluation script with JSONL result output
-- Automatic port selection for the Gradio server
-- Environment-based configuration for models, API endpoints, and runtime options
 
 ## Features
 
@@ -42,14 +26,14 @@ User image or DICOM study
       Gradio interface
             |
             v
-       MedRAX agent
+      Xray_chat agent
        /          \
 Medical tools    Qwen2.5-VL
        \          /
         Reasoned response
 ```
 
-The application uses LangChain and LangGraph for agent orchestration. Model requests are sent through the OpenAI-compatible client, so the same code can work with a local server or a hosted provider.
+The application uses LangChain and LangGraph for agent orchestration. Model requests are sent through the OpenAI-compatible client, so the same code can work with a local server or a hosted provider such as Qwen2.5-VL.
 
 ## Requirements
 
