@@ -1,6 +1,6 @@
 # Xray_chat: Chest X-ray Reasoning Agent
 
-**Repository:** [github.com/rohan-karna0/MedRAX](https://github.com/rohan-karna0/MedRAX)
+**Repository:** [github.com/rohan-karna0/MedRAX](https://github.com/rohan-karna0/Xray_chat)
 
 Xray_chat is a medical AI application for analyzing chest X-ray images and DICOM studies through a multimodal reasoning agent. It combines a Gradio interface, configurable medical imaging tools, and an OpenAI-compatible vision-language model endpoint.
 
