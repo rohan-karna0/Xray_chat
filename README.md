@@ -1,295 +1,136 @@
-<h1 align="center">
-🤖 MedRAX: Medical Reasoning Agent for Chest X-ray
-</h1>
-<p align="center"> <a href="https://arxiv.org/abs/2502.02673" target="_blank"><img src="https://img.shields.io/badge/arXiv-ICML 2025-FF6B6B?style=for-the-badge&logo=arxiv&logoColor=white" alt="arXiv"></a> <a href="https://github.com/rohan-karna0/MedRAX"><img src="https://img.shields.io/badge/GitHub-Code-4A90E2?style=for-the-badge&logo=github&logoColor=white" alt="GitHub"></a> <a href="https://huggingface.co/datasets/wanglab/chest-agent-bench"><img src="https://img.shields.io/badge/HuggingFace-Dataset-FFBF00?style=for-the-badge&logo=huggingface&logoColor=white" alt="HuggingFace Dataset"></a> </p>
+# MedRAX: Chest X-ray Reasoning Agent
 
-![](assets/demo_fast.gif?autoplay=1)
+**Author:** Rohan Karna
+**Repository:** [github.com/rohan-karna0/MedRAX](https://github.com/rohan-karna0/MedRAX)
 
-<br>
+MedRAX is a medical AI application for analyzing chest X-ray images and DICOM studies through a multimodal reasoning agent. It combines a Gradio interface, configurable medical imaging tools, and an OpenAI-compatible vision-language model endpoint.
 
-## Abstract
-Chest X-rays (CXRs) play an integral role in driving critical decisions in disease management and patient care. While recent innovations have led to specialized models for various CXR interpretation tasks, these solutions often operate in isolation, limiting their practical utility in clinical practice. We present MedRAX, the first versatile AI agent that seamlessly integrates state-of-the-art CXR analysis tools and multimodal large language models into a unified framework. MedRAX dynamically leverages these models to address complex medical queries without requiring additional training. To rigorously evaluate its capabilities, we introduce ChestAgentBench, a comprehensive benchmark containing 2,500 complex medical queries across 7 diverse categories. Our experiments demonstrate that MedRAX achieves state-of-the-art performance compared to both open-source and proprietary models, representing a significant step toward the practical deployment of automated CXR interpretation systems.
-<br><br>
+> This project is for research and demonstration only. It is not a medical diagnostic system.
 
-## Portfolio Implementation
-This version is a personal rework of the MedRAX application for experimentation with open-source vision-language models. The agent uses the Qwen2.5-VL tools model through an OpenAI-compatible API and keeps the chest X-ray tools, DICOM support, Gradio interface, and evaluation workflow in one configurable application.
+## My Implementation
 
-Key implementation work includes:
-- Qwen2.5-VL as the default multimodal reasoning model
-- Configurable OpenAI-compatible `OPENAI_BASE_URL`, `OPENAI_API_KEY`, and `OPENAI_MODEL` settings
-- A streamlined Gradio workflow for image and DICOM uploads
-- Selective tool initialization and ChestAgentBench evaluation support
+I reworked the application around an open-source Qwen vision-language model and built a configurable workflow for image-based medical reasoning.
 
+Key work in this version:
 
-## MedRAX
-MedRAX is built on a robust technical foundation:
-- **Core Architecture**: Built on LangChain and LangGraph frameworks
-- **Language Model**: Uses Qwen2.5-VL through an OpenAI-compatible API by default
-- **Deployment**: Supports both local and cloud-based deployments
-- **Interface**: Production-ready interface built with Gradio
-- **Modular Design**: Tool-agnostic architecture allowing easy integration of new capabilities
+- Qwen2.5-VL tools model as the default reasoning model
+- OpenAI-compatible support for local and hosted model endpoints
+- Gradio chat interface for image and DICOM uploads
+- DICOM conversion and browser-friendly image previews
+- Selective initialization of medical imaging tools
+- ChestAgentBench evaluation script with JSONL result output
+- Automatic port selection for the Gradio server
+- Environment-based configuration for models, API endpoints, and runtime options
 
-### Integrated Tools
-- **Visual QA**: Utilizes CheXagent and LLaVA-Med for complex visual understanding and medical reasoning
-- **Segmentation**: Employs MedSAM and PSPNet model trained on ChestX-Det for precise anatomical structure identification
-- **Grounding**: Uses Maira-2 for localizing specific findings in medical images
-- **Report Generation**: Implements SwinV2 Transformer trained on CheXpert Plus for detailed medical reporting
-- **Disease Classification**: Leverages DenseNet-121 from TorchXRayVision for detecting 18 pathology classes
-- **X-ray Generation**: Utilizes RoentGen for synthetic CXR generation
-- **Utilities**: Includes DICOM processing, visualization tools, and custom plotting capabilities
-<br><br>
+## Features
 
+- Chest X-ray classification
+- Chest X-ray segmentation
+- Visual question answering
+- Medical report generation
+- Phrase grounding and finding localization
+- DICOM processing and visualization
+- Optional image generation tools
+- Benchmark evaluation for vision-language models
 
-## ChestAgentBench
-We introduce ChestAgentBench, a comprehensive evaluation framework with 2,500 complex medical queries across 7 categories, built from 675 expert-curated clinical cases. The benchmark evaluates complex multi-step reasoning in CXR interpretation through:
+## Architecture
 
-- Detection
-- Classification
-- Localization
-- Comparison
-- Relationship
-- Diagnosis
-- Characterization
-
-Download the benchmark: [ChestAgentBench on Hugging Face](https://huggingface.co/datasets/wanglab/chest-agent-bench)
-```
-huggingface-cli download wanglab/chestagentbench --repo-type dataset --local-dir chestagentbench
+```text
+User image or DICOM study
+            |
+            v
+      Gradio interface
+            |
+            v
+       MedRAX agent
+       /          \
+Medical tools    Qwen2.5-VL
+       \          /
+        Reasoned response
 ```
 
-Unzip the Eurorad figures to your local `MedMAX` directory.
-```
-unzip chestagentbench/figures.zip
-```
+The application uses LangChain and LangGraph for agent orchestration. Model requests are sent through the OpenAI-compatible client, so the same code can work with a local server or a hosted provider.
 
-To evaluate with GPT-4o, set your OpenAI API key and run the quickstart script.
-```
-export OPENAI_API_KEY="<your-openai-api-key>"
-python quickstart.py \
-    --model chatgpt-4o-latest \
-    --temperature 0.2 \
-    --max-cases 2 \
-    --log-prefix chatgpt-4o-latest \
-    --use-urls
-```
+## Requirements
 
-
-<br>
+- Python 3.10 or newer
+- CUDA-enabled GPU recommended for local medical imaging tools
+- Access to an OpenAI-compatible vision-language model endpoint
+- Model weights for the tools enabled in `main.py`
 
 ## Installation
-### Prerequisites
-- Python 3.8+
-- CUDA/GPU for best performance
 
-### Installation Steps
 ```bash
-# Clone the repository
 git clone https://github.com/rohan-karna0/MedRAX.git
 cd MedRAX
-
-# Install package
+python -m venv .venv
+source .venv/bin/activate
 pip install -e .
 ```
 
-### Getting Started
+For development dependencies:
+
 ```bash
-# Start the Gradio interface
+pip install -e ".[dev]"
+```
+
+## Configuration
+
+Create a `.env` file in the project root. Do not commit this file.
+
+```dotenv
+OPENAI_BASE_URL=<openai-compatible-endpoint>
+OPENAI_API_KEY=<your-api-key>
+OPENAI_MODEL=rfsousa/qwen2.5vl:tools
+GRADIO_SERVER_PORT=8585
+```
+
+For a local OpenAI-compatible server, use its base URL and a placeholder API key if the server does not require authentication. The default model can be changed without editing Python code.
+
+## Run the Application
+
+```bash
 python main.py
 ```
-or if you run into permission issues
-```bash
-sudo -E env "PATH=$PATH" python main.py
-```
-You need to setup the `model_dir` inside `main.py` to the directory where you want to download or already have the weights of above tools from Hugging Face.
-Comment out the tools that you do not have access to.
-Configure your model provider in `.env` before starting the application:
-```bash
-OPENAI_BASE_URL="<openai-compatible-endpoint>"
-OPENAI_API_KEY="<your-api-key>"
-OPENAI_MODEL="rfsousa/qwen2.5vl:tools"
-```
-<br><br><br>
 
+The server selects an available port starting at `8585` and launches the Gradio interface. Upload a chest X-ray or DICOM file, choose a supported workflow, and submit a clinical question.
 
-## Tool Selection and Initialization
+The default tools are configured in `main.py`. Tools that require additional model weights can be enabled or disabled in the `selected_tools` list.
 
-MedRAX supports selective tool initialization, allowing you to use only the tools you need. Tools can be specified when initializing the agent (look at `main.py`):
+## Evaluate With ChestAgentBench
 
-```python
-selected_tools = [
-    "ImageVisualizerTool",
-    "ChestXRayClassifierTool",
-    "ChestXRaySegmentationTool",
-    # Add or remove tools as needed
-]
-
-agent, tools_dict = initialize_agent(
-    "medrax/docs/system_prompts.txt",
-    tools_to_use=selected_tools,
-    model_dir="/model-weights"
-)
-```
-
-<br><br>
-## Automatically Downloaded Models
-
-The following tools will automatically download their model weights when initialized:
-
-### Classification Tool
-```python
-ChestXRayClassifierTool(device=device)
-```
-
-### Segmentation Tool
-```python
-ChestXRaySegmentationTool(device=device)
-```
-
-### Grounding Tool
-```python
-XRayPhraseGroundingTool(
-    cache_dir=model_dir, 
-    temp_dir=temp_dir, 
-    load_in_8bit=True, 
-    device=device
-)
-```
-- Maira-2 weights download to specified `cache_dir`
-- 8-bit and 4-bit quantization available for reduced memory usage
-
-### LLaVA-Med Tool
-```python
-LlavaMedTool(
-    cache_dir=model_dir, 
-    device=device, 
-    load_in_8bit=True
-)
-```
-- Automatic weight download to `cache_dir`
-- 8-bit and 4-bit quantization available for reduced memory usage
-
-### Report Generation Tool
-```python
-ChestXRayReportGeneratorTool(
-    cache_dir=model_dir, 
-    device=device
-)
-```
-
-### Visual QA Tool
-```python
-XRayVQATool(
-    cache_dir=model_dir, 
-    device=device
-)
-```
-- CheXagent weights download automatically
-
-### MedSAM Tool
-```
-Support for MedSAM segmentation will be added in a future update.
-```
-
-### Utility Tools
-No additional model weights required:
-```python
-ImageVisualizerTool()
-DicomProcessorTool(temp_dir=temp_dir)
-```
-<br>
-
-## Manual Setup Required
-
-### Image Generation Tool
-```python
-ChestXRayGeneratorTool(
-    model_path=f"{model_dir}/roentgen", 
-    temp_dir=temp_dir, 
-    device=device
-)
-```
-- RoentGen weights require manual setup:
-  1. Contact authors: https://github.com/StanfordMIMI/RoentGen
-  2. Place weights in `{model_dir}/roentgen`
-  3. Optional tool, can be excluded if not needed
-<br>
-
-## Configuration Notes
-
-### Required Parameters
-- `model_dir` or `cache_dir`: Base directory for model weights that Hugging Face uses
-- `temp_dir`: Directory for temporary files
-- `device`: "cuda" for GPU, "cpu" for CPU-only
-
-### Memory Management
-- Consider selective tool initialization for resource constraints
-- Use 8-bit quantization where available
-- Some tools (LLaVA-Med, Grounding) are more resource-intensive
-<br>
-
-### Local LLMs
-If you are running a local LLM using frameworks like [Ollama](https://ollama.com/) or [LM Studio](https://lmstudio.ai/), you need to configure your environment variables accordingly. For example:
-```
-export OPENAI_BASE_URL="http://localhost:11434/v1"
-export OPENAI_API_KEY="ollama"
-```
-<br>
-
-### Optional: OpenAI-compatible Providers
-
-MedRAX supports OpenAI-compatible APIs, allowing regional or local LLM providers to serve as alternative backends.
-
-For example, to use **Qwen3-VL** via [Alibaba Cloud DashScope](https://bailian.console.aliyun.com/?tab=model#/model-market), set the following environment variables:
+Download the benchmark data and place it in the directory used by the evaluator. Then run:
 
 ```bash
-export OPENAI_BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
-export OPENAI_API_KEY="<your-dashscope-api-key>"
-export OPENAI_MODEL="qwen3-vl-235b-a22b-instruct"
-```
-<br>
-
-## Star History
-<div align="center">
-  
-[![Star History Chart](https://api.star-history.com/svg?repos=bowang-lab/MedRAX&type=Date)](https://star-history.com/#bowang-lab/MedRAX&Date)
-
-</div>
-<br>
-
-
-## Authors
-- **Adibvafa Fallahpour**¹²³⁴ * (adibvafa.fallahpour@mail.utoronto.ca)
-- ****Jun Ma****²³ *
-- **Alif Munim**³⁵ *
-- ****Hongwei Lyu****³
-- ****Bo Wang****¹²³⁶
-
-¹ Department of Computer Science, University of Toronto, Toronto, Canada <br>
-² Vector Institute, Toronto, Canada <br>
-³ University Health Network, Toronto, Canada <br>
-⁴ Cohere, Toronto, Canada <br>
-⁵ Cohere Labs, Toronto, Canada <br>
-⁶ Department of Laboratory Medicine and Pathobiology, University of Toronto, Toronto, Canada
-
-<br>
-* Equal contribution
-<br><br>
-
-
-## Citation
-If you find this work useful, please cite our paper:
-```bibtex
-@misc{fallahpour2025medraxmedicalreasoningagent,
-      title={MedRAX: Medical Reasoning Agent for Chest X-ray}, 
-      author={Adibvafa Fallahpour and Jun Ma and Alif Munim and Hongwei Lyu and Bo Wang},
-      year={2025},
-      eprint={2502.02673},
-      archivePrefix={arXiv},
-      primaryClass={cs.LG},
-      url={https://arxiv.org/abs/2502.02673}, 
-}
+python evaluate_chestagentbench.py \
+  --benchmark-dir /path/to/chestagentbench \
+  --max-questions 10
 ```
 
----
-<p align="center">
-Made with ❤️ at University of Toronto, Vector Institute, and University Health Network
-</p>
+Results are written as JSONL files in `results/`. This directory is intentionally excluded from Git because evaluation output is generated locally.
+
+## Project Structure
+
+```text
+.
+├── main.py                         # Application entry point
+├── interface.py                    # Gradio chat and upload workflow
+├── evaluate_chestagentbench.py     # Benchmark evaluation script
+├── medrax/
+│   ├── agent/                      # Agent orchestration
+│   ├── tools/                      # Medical imaging tools
+│   └── utils/                      # Shared utilities
+├── benchmark/                      # Benchmark helpers
+├── data/                           # Metadata and data utilities
+├── demo/                           # Sample chest X-ray studies
+└── pyproject.toml                  # Package and dependency configuration
+```
+
+## Responsible Use
+
+This software is an engineering and research project. Outputs may be incomplete or incorrect and must not be used as a substitute for evaluation by qualified healthcare professionals.
+
+## Author
+
+**Rohan Karna**
+GitHub: [@rohan-karna0](https://github.com/rohan-karna0)
